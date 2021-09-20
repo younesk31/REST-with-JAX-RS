@@ -1,5 +1,6 @@
 package dtos;
 
+import entities.Address;
 import entities.Person;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class PersonDTO {
     private String fName;
     private String lName;
     private String phone;
+    private Address address;
 
     public PersonDTO() {
     }
@@ -20,12 +22,14 @@ public class PersonDTO {
         this.lName = p.getLastName();
         this.phone = p.getPhone();
         this.id = p.getId();
+        this.address = p.getAddress();
     }
 
-    public PersonDTO(String fn, String ln, String phone) {
+    public PersonDTO(String fn, String ln, String phone, Address address) {
         this.fName = fn;
         this.lName = ln;
         this.phone = phone;
+        this.address = address;
     }
 
     public static List<PersonDTO> getDtos(List<Person> personList){
@@ -34,6 +38,13 @@ public class PersonDTO {
         return personDTOS;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 
     public Integer getId() {
         return id;
@@ -82,11 +93,11 @@ public class PersonDTO {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PersonDTO{");
-        sb.append("fName='").append(fName);
+        final StringBuilder sb = new StringBuilder("fName='").append(fName).append('\'');
         sb.append(", lName='").append(lName).append('\'');
         sb.append(", phone='").append(phone).append('\'');
-        sb.append(", id=").append(id).append('\'');
+        sb.append(", address=").append(address).append('\'');
+        sb.append("id=").append(id);
         sb.append('}');
         return sb.toString();
     }

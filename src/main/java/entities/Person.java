@@ -16,9 +16,18 @@ public class Person implements Serializable {
     private String firstName;
     private String lastName;
     private String phone;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @Temporal(TemporalType.DATE)
     private Date created;
     private Date lastEdited;
+
+    public Address getAddress() {
+        return address;
+    }
 
     public Person() {
     }
