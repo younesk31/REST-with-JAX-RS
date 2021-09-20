@@ -1,6 +1,7 @@
 package rest;
 
 import entities.Person;
+import exceptions.PersonNotFoundException;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -25,7 +26,7 @@ public class PersonResourceTest {
 
     private static final int SERVER_PORT = 7777;
     private static final String SERVER_URL = "http://localhost/api";
-    private static Person r1, r2;
+    private static Person p1, p2;
 
     static final URI BASE_URI = UriBuilder.fromUri(SERVER_URL).port(SERVER_PORT).build();
     private static HttpServer httpServer;
@@ -63,13 +64,13 @@ public class PersonResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        r1 = new Person("Some txt", "More text","123");
-        r2 = new Person("aaa", "bbb", "456");
+        p1 = new Person("test", "TESTING","123");
+        p2 = new Person("test2", "TESTING2","1234");
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
-            em.persist(r1);
-            em.persist(r2);
+            em.persist(p1);
+            em.persist(p2);
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -79,27 +80,27 @@ public class PersonResourceTest {
     @Test
     public void testServerIsUp() {
         System.out.println("Testing is server UP");
-        given().when().get("/xxx").then().statusCode(200);
+        given().when().get("/person").then().statusCode(200);
     }
 
     //This test assumes the database contains two rows
     @Test
-    public void testDummyMsg() throws Exception {
+    public void testMsg() throws PersonNotFoundException {
         given()
                 .contentType("application/json")
-                .get("/xxx/").then()
+                .get("/person/").then()
                 .assertThat()
                 .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("Hello World"));
+                .body("msg", equalTo("Person Query's"));
     }
 
     @Test
-    public void testCount() throws Exception {
+    public void testGetPerson() throws Exception {
         given()
                 .contentType("application/json")
-                .get("/xxx/count").then()
+                .get("person/1").then()
                 .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("count", equalTo(2));
+                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR_500.getStatusCode())
+                .body("msg", equalTo(null));
     }
 }

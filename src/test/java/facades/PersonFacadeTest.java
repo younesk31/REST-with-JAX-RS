@@ -1,18 +1,15 @@
 package facades;
 
+import org.junit.jupiter.api.*;
 import utils.EMF_Creator;
 import entities.Person;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 //Uncomment the line below, to temporarily disable this test
-//@Disabled
+@Disabled
 public class PersonFacadeTest {
 
     private static EntityManagerFactory emf;
@@ -41,7 +38,7 @@ public class PersonFacadeTest {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();
             em.persist(new Person("NAME", "LASTNAME", "12345678"));
-            em.persist(new Person("NAME2", "LASTNAME2", "87654321"));
+            em.persist(new Person("NAME2", "LASTNAME2", "1234"));
 
             em.getTransaction().commit();
         } finally {
@@ -54,11 +51,5 @@ public class PersonFacadeTest {
 //        Remove any data after each test was run
     }
 
-    // TODO: Delete or change this method 
-    @Test
-    public void testAFacadeMethod() throws Exception {
-        assertEquals(2, facade.hashCode(), "Expects two rows in the database");
-    }
-    
 
 }

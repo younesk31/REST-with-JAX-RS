@@ -56,7 +56,7 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getPerson(@PathParam("id") int id) {
-        return GSON.toJson("Person: "+FACADE.getPerson(id));
+        return GSON.toJson(FACADE.getPerson(id));
     }
 
     @Path("getall")
