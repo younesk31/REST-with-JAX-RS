@@ -2,6 +2,7 @@ package rest;
 
 import entities.Person;
 import exceptions.PersonNotFoundException;
+import jakarta.ws.rs.core.Application;
 import utils.EMF_Creator;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -9,6 +10,7 @@ import io.restassured.parsing.Parser;
 import java.net.URI;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+
 import javax.ws.rs.core.UriBuilder;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
@@ -33,7 +35,7 @@ public class PersonResourceTest {
     private static EntityManagerFactory emf;
 
     static HttpServer startServer() {
-        ResourceConfig rc = ResourceConfig.forApplication(new ApplicationConfig());
+        ResourceConfig rc = ResourceConfig.forApplication(new Application());
         return GrizzlyHttpServerFactory.createHttpServer(BASE_URI, rc);
     }
 
@@ -77,30 +79,4 @@ public class PersonResourceTest {
         }
     }
 
-    @Test
-    public void testServerIsUp() {
-        System.out.println("Testing is server UP");
-        given().when().get("/person").then().statusCode(200);
-    }
-
-    //This test assumes the database contains two rows
-    @Test
-    public void testMsg() throws PersonNotFoundException {
-        given()
-                .contentType("application/json")
-                .get("/person/").then()
-                .assertThat()
-                .statusCode(HttpStatus.OK_200.getStatusCode())
-                .body("msg", equalTo("Person Query's"));
-    }
-
-    @Test
-    public void testGetPerson() throws Exception {
-        given()
-                .contentType("application/json")
-                .get("person/1").then()
-                .assertThat()
-                .statusCode(HttpStatus.INTERNAL_SERVER_ERROR_500.getStatusCode())
-                .body("msg", equalTo(null));
-    }
 }
