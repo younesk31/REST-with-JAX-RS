@@ -1,26 +1,21 @@
 package rest;
 
 import entities.Person;
-import exceptions.PersonNotFoundException;
-import jakarta.ws.rs.core.Application;
-import utils.EMF_Creator;
 import io.restassured.RestAssured;
-import static io.restassured.RestAssured.given;
 import io.restassured.parsing.Parser;
-import java.net.URI;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-
-import javax.ws.rs.core.UriBuilder;
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import static org.hamcrest.Matchers.equalTo;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import utils.EMF_Creator;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 //Uncomment the line below, to temporarily disable this test
 //@Disabled
 
@@ -66,8 +61,8 @@ public class PersonResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-        p1 = new Person("test", "TESTING","123");
-        p2 = new Person("test2", "TESTING2","1234");
+        p1 = new Person("test", "TESTING", "123");
+        p2 = new Person("test2", "TESTING2", "1234");
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Person.deleteAllRows").executeUpdate();

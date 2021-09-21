@@ -1,6 +1,5 @@
-package rest;
 
-import facades.PersonFacade;
+package rest;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -23,8 +22,10 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(errorhandling.GenericExceptionMapper.class);
+        resources.add(errorhandling.ExceptionDTO.class);
+        resources.add(errorhandling.PersonNotFoundException.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
-        resources.add(PersonResource.class);
+        resources.add(rest.PersonResource.class);
     }
-    
+
 }

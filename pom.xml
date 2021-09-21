@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.bundles</groupId>
             <artifactId>jaxrs-ri</artifactId>
-            <version>3.0.2</version>
+            <version>2.32</version>
         </dependency>
 
         <dependency>
@@ -102,7 +102,6 @@
             <artifactId>properties-maven-plugin</artifactId>
             <version>1.0.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -121,6 +120,8 @@
                     <update>true</update>
                 </configuration>
             </plugin>
+
+
 
             <!--This is used to enable @BeforeAll etc used in jUnit 5 -->
             <plugin>

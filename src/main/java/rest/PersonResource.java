@@ -4,14 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
 import entities.Person;
-import utils.EMF_Creator;
 import facades.PersonFacade;
+import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @Path("person")
@@ -32,7 +29,7 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String addPerson(@PathParam("fname") String fname, @PathParam("lname") String lname, @PathParam("phone") String phone) {
-        return GSON.toJson("Added: "+FACADE.addPerson(fname, lname, phone));
+        return GSON.toJson("Added: " + FACADE.addPerson(fname, lname, phone));
     }
 
     @Path("edit/{id}/{fname}/{lname}/{phone}")
@@ -41,15 +38,15 @@ public class PersonResource {
     public String editPerson(@PathParam("id") int id, @PathParam("fname") String fname, @PathParam("lname") String lname, @PathParam("phone") String phone) {
         PersonDTO p = new PersonDTO(new Person(fname, lname, phone));
         p.setId(id);
-        return GSON.toJson("Edited: "+FACADE.editPerson(p));
+        return GSON.toJson("Edited: " + FACADE.editPerson(p));
     }
 
     @Path("delete/{id}")
-    @GET
+    @DELETE
     @Produces({MediaType.APPLICATION_JSON})
     public String deletePerson(@PathParam("id") int id) {
         //String info = "{\"Deleted ID\":\""+id+"\"}";
-        return GSON.toJson("Deleted: "+FACADE.deletePerson(id));
+        return GSON.toJson(FACADE.deletePerson(id));
     }
 
     @Path("/{id}")
@@ -63,6 +60,6 @@ public class PersonResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAllPersons() {
-        return GSON.toJson("ALL Persons: "+FACADE.getAllPersons());
+        return GSON.toJson("ALL Persons: " + FACADE.getAllPersons());
     }
 }
