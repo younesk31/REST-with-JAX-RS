@@ -1,5 +1,7 @@
 package entities;
 
+import dtos.PersonDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -29,6 +31,14 @@ public class Person implements Serializable {
         this.phone = phone;
         this.created = new Date();
         this.lastEdited = new Date();
+    }
+
+    public Person updateFromDto(PersonDTO dto){
+        this.lastEdited = new Date();
+        this.firstName = dto.getfName();
+        this.lastName = dto.getlName();
+        this.phone = dto.getPhone();
+        return this;
     }
 
     public Integer getId() {

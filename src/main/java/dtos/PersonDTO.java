@@ -90,16 +90,5 @@ public class PersonDTO {
         sb.append('}');
         return sb.toString();
     }
-
-    public static class PersonsDTO {
-
-        List<PersonDTO> all = new ArrayList();
-
-        public PersonsDTO(List<Person> personEntities) {
-            personEntities.forEach((p) -> { all.add(new PersonDTO(p));
-            });
-        }
-
-    }
 }
 

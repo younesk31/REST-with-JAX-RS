@@ -3,63 +3,64 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
-import entities.Person;
+import errorhandling.MissingFieldsException;
+import errorhandling.PersonNotFoundException;
 import facades.PersonFacade;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 @Path("person")
 public class PersonResource {
 
     private final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
 
-    private final PersonFacade FACADE = PersonFacade.getPersonFacade(EMF);
-    private final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private final PersonFacade facade = PersonFacade.getPersonFacade(EMF);
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String welcome() {
-        return "{\"msg\":\"Person Query's\"}";
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addPerson(String person) throws MissingFieldsException {
+        PersonDTO dto = gson.fromJson(person, PersonDTO.class);
+        dto = facade.addPerson(dto.getfName(), dto.getlName(), dto.getPhone());
+        return Response.ok(gson.toJson(dto), MediaType.APPLICATION_JSON).build();
     }
 
-    @Path("add/{fname}/{lname}/{phone}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String addPerson(@PathParam("fname") String fname, @PathParam("lname") String lname, @PathParam("phone") String phone) {
-        return GSON.toJson("Added: " + FACADE.addPerson(fname, lname, phone));
+    @Path("{id}")
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response editPerson(@PathParam("id") int id, String person) throws MissingFieldsException {
+        PersonDTO dto = gson.fromJson(person, PersonDTO.class);
+        dto.setId(id);
+        dto = facade.editPerson(dto);
+        return Response.ok(gson.toJson(dto), MediaType.APPLICATION_JSON).build();
     }
 
-    @Path("edit/{id}/{fname}/{lname}/{phone}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String editPerson(@PathParam("id") int id, @PathParam("fname") String fname, @PathParam("lname") String lname, @PathParam("phone") String phone) {
-        PersonDTO p = new PersonDTO(new Person(fname, lname, phone));
-        p.setId(id);
-        return GSON.toJson("Edited: " + FACADE.editPerson(p));
-    }
-
-    @Path("delete/{id}")
+    @Path("{id}")
     @DELETE
-    @Produces({MediaType.APPLICATION_JSON})
-    public String deletePerson(@PathParam("id") int id) {
-        //String info = "{\"Deleted ID\":\""+id+"\"}";
-        return GSON.toJson(FACADE.deletePerson(id));
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deletePerson(@PathParam("id") int id) throws PersonNotFoundException {
+        PersonDTO dto = facade.deletePerson(id);
+        return Response.ok("{\"status\" : \"removed id:" + dto.getId() + "\"}", MediaType.APPLICATION_JSON).build();
     }
 
-    @Path("/{id}")
+    @Path("{id}")
     @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getPerson(@PathParam("id") int id) {
-        return GSON.toJson(FACADE.getPerson(id));
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPersonById(@PathParam("id") int id) throws PersonNotFoundException {
+        PersonDTO dto = facade.getPerson(id);
+        return Response.ok(gson.toJson(dto), MediaType.APPLICATION_JSON).build();
     }
 
-    @Path("getall")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getAllPersons() {
-        return GSON.toJson("ALL Persons: " + FACADE.getAllPersons());
+    public Response getAllPersons() {
+        return Response.ok(gson.toJson(facade.getAllPersons()), MediaType.APPLICATION_JSON).build();
     }
 }

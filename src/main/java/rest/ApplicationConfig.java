@@ -1,4 +1,3 @@
-
 package rest;
 
 import java.util.Set;
@@ -22,8 +21,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(errorhandling.GenericExceptionMapper.class);
-        resources.add(errorhandling.ExceptionDTO.class);
-        resources.add(errorhandling.PersonNotFoundException.class);
+        resources.add(errorhandling.PersonNotFoundExceptionMapper.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
         resources.add(rest.PersonResource.class);
     }
